@@ -3,11 +3,11 @@ import java.util.concurrent.Semaphore;
 public class Run {
     public static void main(String[] args) {
         Semaphore semaforo = new Semaphore(1); // Solo un acceso a la vez a la ruleta
-        Apostador hilo1 = new Apostador(1, 10, semaforo, "Martingala");
-        Apostador hilo2 = new Apostador(2, 10, semaforo, "MartingalaInversa");
-        Apostador hilo3 = new Apostador(3, 10, semaforo, "DAlembert");
-        Apostador hilo4 = new Apostador(4, 10, semaforo, "Fibonacci");
-        Apostador hilo5 = new Apostador(5, 10, semaforo, "Aleatoria");
+        Apostador hilo1 = new Apostador(1, 10, semaforo, "Martingala", "Plena");
+        Apostador hilo2 = new Apostador(2, 10, semaforo, "MartingalaInversa", "ParImpar");
+        Apostador hilo3 = new Apostador(3, 10, semaforo, "DAlembert", "Color");
+        Apostador hilo4 = new Apostador(4, 10, semaforo, "Fibonacci", "FaltaPasa");
+        Apostador hilo5 = new Apostador(5, 10, semaforo, "Aleatoria", "Plena");
 
         hilo1.start();
         hilo2.start();
