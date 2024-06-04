@@ -40,25 +40,25 @@ public class Apostador extends Thread {
                 switch (tipoApuesta) {
                     case "Plena":
                         tipoApuestaInfo = "Plena al número " + apuestaNumero;
-                        Apuesta.realizarApuestaPlena(apuestaNumero, resultado, monto, cuenta);
+                        cuenta = Apuesta.realizarApuestaPlena(apuestaNumero, resultado, monto, cuenta);
                         break;
                     case "ParImpar":
                         tipoApuestaInfo = "Par/Impar (Par: " + esPar + ")";
-                        Apuesta.realizarApuestaParImpar(esPar, resultado, monto, cuenta);
+                        cuenta = Apuesta.realizarApuestaParImpar(esPar, resultado, monto, cuenta);
                         break;
                     case "Color":
                         tipoApuestaInfo = "Color (Rojo: " + esRojo + ")";
-                        Apuesta.realizarApuestaColor(esRojo, resultado, monto, cuenta);
+                        cuenta = Apuesta.realizarApuestaColor(esRojo, resultado, monto, cuenta);
                         break;
                     case "FaltaPasa":
                         tipoApuestaInfo = "Falta/Pasa (Falta: " + esFalta + ")";
-                        Apuesta.realizarApuestaFaltaPasa(esFalta, resultado, monto, cuenta);
+                        cuenta = Apuesta.realizarApuestaFaltaPasa(esFalta, resultado, monto, cuenta);
                         break;
                     default:
                         throw new IllegalArgumentException("Tipo de apuesta no válida: " + tipoApuesta);
                 }
 
-                System.out.println("Hilo " + id + " - Realizando Apuesta: " + tipoApuestaInfo + ", Monto de apuesta: " + monto + " - Resultado Ruleta: " + resultado + " (" + color + ")");
+                System.out.println("Hilo " + id + " - Realizando Apuesta: " + tipoApuestaInfo + " - Resultado Ruleta: " + resultado + " (" + color + "), Monto de apuesta: " + monto);
 
                 // Aplicar estrategia
                 switch (estrategia) {
