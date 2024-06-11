@@ -16,10 +16,10 @@ public class Apostador extends Thread {
     Ruleta resruleta = new Ruleta();
     estrategia estrategiaClass = new estrategia();
 
-    public Apostador(int id, int monto, int maximoPerdida, int maximoGanancia, Semaphore semaforo, String estrategia, String tipoApuesta) {
-        this.cuenta = monto;
+    public Apostador(int id, int cuentaInicial, int maximoPerdida, int maximoGanancia, Semaphore semaforo, String estrategia, String tipoApuesta) {
+        this.cuenta = cuentaInicial;
         this.id = id;
-        this.monto = monto;
+        this.monto = 10; // Monto inicial de la apuesta
         this.maximoPerdida = maximoPerdida;
         this.maximoGanancia = maximoGanancia;
         this.semaforo = semaforo;
@@ -34,7 +34,7 @@ public class Apostador extends Thread {
     @Override
     public void run() {
         for (int i = 0; i < MAX_ACCESOS; i++) {
-            if (cuenta <= -maximoPerdida || cuenta >= maximoGanancia) {
+            if (cuenta <= -maximoPerdida || cuenta >= maximoGanancia || cuenta < monto) {
                 break;
             }
             
@@ -75,19 +75,19 @@ public class Apostador extends Thread {
                 // Aplicar estrategia
                 switch (estrategia) {
                     case "Martingala":
-                        monto = estrategiaClass.estrategiaMartingala(monto, apuestaNumero == resultado);
+                        monto = Math.min(estrategiaClass.estrategiaMartingala(monto, apuestaNumero == resultado), cuenta);
                         break;
                     case "MartingalaInversa":
-                        monto = estrategiaClass.estrategiaMartingalaInversa(monto, apuestaNumero == resultado);
+                        monto = Math.min(estrategiaClass.estrategiaMartingalaInversa(monto, apuestaNumero == resultado), cuenta);
                         break;
                     case "DAlembert":
-                        monto = estrategiaClass.estrategiaDAlembert(monto, apuestaNumero == resultado);
+                        monto = Math.min(estrategiaClass.estrategiaDAlembert(monto, apuestaNumero == resultado), cuenta);
                         break;
                     case "Fibonacci":
-                        monto = estrategiaClass.estrategiaFibonacci(monto, apuestaNumero == resultado, fibonacciSequence, currentIndex);
+                        monto = Math.min(estrategiaClass.estrategiaFibonacci(monto, apuestaNumero == resultado, fibonacciSequence, currentIndex), cuenta);
                         break;
                     case "Aleatoria":
-                        monto = estrategiaClass.estrategiaAleatoria();
+                        monto = Math.min(estrategiaClass.estrategiaAleatoria(), cuenta);
                         break;
                     default:
                         throw new IllegalArgumentException("Estrategia no válida: " + estrategia);
