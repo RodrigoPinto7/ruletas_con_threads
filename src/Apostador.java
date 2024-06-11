@@ -5,6 +5,8 @@ public class Apostador extends Thread {
     private int cuenta;
     private final int id;
     private int monto;
+    private final int maximoPerdida;
+    private final int maximoGanancia;
     private final Semaphore semaforo;
     private final static int MAX_ACCESOS = 10;
     private final String estrategia;
@@ -14,18 +16,28 @@ public class Apostador extends Thread {
     Ruleta resruleta = new Ruleta();
     estrategia estrategiaClass = new estrategia();
 
-    public Apostador(int id, int monto, Semaphore semaforo, String estrategia, String tipoApuesta) {
-        this.cuenta = 0;
+    public Apostador(int id, int monto, int maximoPerdida, int maximoGanancia, Semaphore semaforo, String estrategia, String tipoApuesta) {
+        this.cuenta = monto;
         this.id = id;
         this.monto = monto;
+        this.maximoPerdida = maximoPerdida;
+        this.maximoGanancia = maximoGanancia;
         this.semaforo = semaforo;
         this.estrategia = estrategia;
         this.tipoApuesta = tipoApuesta;
     }
 
+    public int getCuenta() {
+        return cuenta;
+    }
+
     @Override
     public void run() {
         for (int i = 0; i < MAX_ACCESOS; i++) {
+            if (cuenta <= -maximoPerdida || cuenta >= maximoGanancia) {
+                break;
+            }
+            
             int apuestaNumero = ThreadLocalRandom.current().nextInt(0, 37);
             boolean esPar = ThreadLocalRandom.current().nextBoolean();
             boolean esRojo = ThreadLocalRandom.current().nextBoolean();
