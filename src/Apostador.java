@@ -13,6 +13,8 @@ public class Apostador extends Thread {
     private final String tipoApuesta;
     private final int[] fibonacciSequence = {1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89};
     private int currentIndex = 0;
+    private int intentos;
+    private int neto;  // Variable para registrar la ganancia/pérdida neta
     Ruleta resruleta = new Ruleta();
     estrategia estrategiaClass = new estrategia();
 
@@ -25,14 +27,25 @@ public class Apostador extends Thread {
         this.semaforo = semaforo;
         this.estrategia = estrategia;
         this.tipoApuesta = tipoApuesta;
+        this.intentos = 0;
+        this.neto = 0; // Inicializar en 0
     }
 
     public int getCuenta() {
         return cuenta;
     }
 
+    public int getIntentos() {
+        return intentos;
+    }
+
+    public int getNeto() {
+        return neto;
+    }
+
     @Override
     public void run() {
+        int cuentaInicial = cuenta; // Guardar el saldo inicial
         for (int i = 0; i < MAX_ACCESOS; i++) {
             if (cuenta <= -maximoPerdida || cuenta >= maximoGanancia || cuenta < monto) {
                 break;
@@ -92,12 +105,15 @@ public class Apostador extends Thread {
                     default:
                         throw new IllegalArgumentException("Estrategia no válida: " + estrategia);
                 }
+
+                intentos++; // Incrementar el contador de intentos
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
                 semaforo.release(); // Liberar acceso a ruleta
             }
         }
-        System.out.println("Hilo " + id + " finaliza con cuenta: " + cuenta);
+        neto = cuenta - cuentaInicial; // Calcular la ganancia/pérdida neta
+        System.out.println("Hilo " + id + " finaliza con cuenta: " + cuenta + ", intentos: " + intentos + ", neto: " + neto);
     }
 }

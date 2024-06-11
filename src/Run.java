@@ -17,7 +17,7 @@ public class Run {
         String[] tiposApuesta = {"Plena", "ParImpar", "Color", "FaltaPasa"};
         
         List<Object[]> registros = new ArrayList<>();
-        registros.add(new Object[]{"Iteracion", "Estrategia", "TipoApuesta", "CuentaFinal"});
+        registros.add(new Object[]{"Iteracion", "Estrategia", "TipoApuesta", "CuentaFinal", "Intentos", "Neto"});
 
         for (int i = 0; i < MONTECARLO_ITERATIONS; i++) {
             Semaphore semaforo = new Semaphore(1);
@@ -32,7 +32,7 @@ public class Run {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    registros.add(new Object[]{i + 1, estrategia, tipoApuesta, apostador.getCuenta()});
+                    registros.add(new Object[]{i + 1, estrategia, tipoApuesta, apostador.getCuenta(), apostador.getIntentos(), apostador.getNeto()});
                 }
             }
         }
